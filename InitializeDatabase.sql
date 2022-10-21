@@ -1,0 +1,395 @@
+﻿USE [master]
+GO
+
+CREATE DATABASE [CascadeFinTech]
+ WITH CATALOG_COLLATION = DATABASE_DEFAULT
+GO
+
+ALTER DATABASE [CascadeFinTech] SET COMPATIBILITY_LEVEL = 150
+GO
+
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled')) BEGIN
+    EXEC [CascadeFinTech].[dbo].[sp_fulltext_database] @action = 'enable'
+END
+GO
+
+ALTER DATABASE [CascadeFinTech] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [CascadeFinTech] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [CascadeFinTech] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [CascadeFinTech] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [CascadeFinTech] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [CascadeFinTech] SET AUTO_CLOSE OFF 
+GO
+ALTER DATABASE [CascadeFinTech] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [CascadeFinTech] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [CascadeFinTech] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [CascadeFinTech] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [CascadeFinTech] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [CascadeFinTech] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [CascadeFinTech] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [CascadeFinTech] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [CascadeFinTech] SET  DISABLE_BROKER 
+GO
+ALTER DATABASE [CascadeFinTech] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [CascadeFinTech] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [CascadeFinTech] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [CascadeFinTech] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [CascadeFinTech] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [CascadeFinTech] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+ALTER DATABASE [CascadeFinTech] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [CascadeFinTech] SET RECOVERY FULL 
+GO
+ALTER DATABASE [CascadeFinTech] SET  MULTI_USER 
+GO
+ALTER DATABASE [CascadeFinTech] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [CascadeFinTech] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [CascadeFinTech] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [CascadeFinTech] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+ALTER DATABASE [CascadeFinTech] SET DELAYED_DURABILITY = DISABLED 
+GO
+ALTER DATABASE [CascadeFinTech] SET ACCELERATED_DATABASE_RECOVERY = OFF  
+GO
+
+EXEC sys.sp_db_vardecimal_storage_format N'CascadeFinTech', N'ON'
+GO
+
+ALTER DATABASE [CascadeFinTech] SET QUERY_STORE = OFF
+GO
+
+USE [CascadeFinTech]
+GO
+
+CREATE SCHEMA [app]
+GO
+
+CREATE SCHEMA [orders]
+GO
+
+CREATE SCHEMA [payments]
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [orders].[Order](
+	[Id] [uniqueidentifier] NOT NULL,
+	[CustomerId] [uniqueidentifier] NOT NULL,
+	[IsRemoved] [bit] NOT NULL,
+	[Value] [decimal](18, 2) NOT NULL,
+	[Currency] [varchar](3) NOT NULL,
+	[ValueInEUR] [decimal](18, 2) NOT NULL,
+	[CurrencyEUR] [varchar](3) NOT NULL,
+	[StatusId] [tinyint] NOT NULL,
+	[OrderDate] [datetime2](7) NOT NULL,
+	[OrderChangeDate] [datetime2](7) NULL,
+ CONSTRAINT [PK_orders_Order_Id] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE VIEW [orders].[ViewOrder]
+AS
+(
+	SELECT
+		[Order].[Id],
+		[Order].[CustomerId],
+		[Order].[Value],
+		[Order].[IsRemoved],
+		[Order].[Currency]
+	FROM [orders].[Order] AS [Order]
+)
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Book](
+	[Id] [uniqueidentifier] NOT NULL,
+	[AuthorId] [uniqueidentifier] NOT NULL,
+	[PublisherId] [uniqueidentifier] NOT NULL,
+	[Title] [nvarchar](150) NOT NULL,
+ CONSTRAINT [PK_dbo_Book_Id] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [orders].[OrderBook](
+	[OrderId] [uniqueidentifier] NOT NULL,
+	[BookId] [uniqueidentifier] NOT NULL,
+	[Quantity] [int] NULL,
+	[Value] [decimal](18, 2) NULL,
+	[Currency] [varchar](3) NULL,
+	[ValueInEUR] [decimal](18, 2) NULL,
+	[CurrencyEUR] [varchar](3) NULL,
+ CONSTRAINT [PK_orders_OrderBook_OrderId_BookId] PRIMARY KEY CLUSTERED 
+(
+	[OrderId] ASC,
+	[BookId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE VIEW [orders].[ViewOrderBook]
+AS
+(
+	SELECT
+		[OrderBook].[OrderId],
+		[OrderBook].[BookId],
+		[OrderBook].[Quantity],
+		[OrderBook].[Value],
+		[OrderBook].[Currency],
+		[Book].[Title]
+	FROM [orders].[OrderBook] AS [OrderBook]
+		INNER JOIN [dbo].[Book] AS [Book]
+			ON [OrderBook].BookId = [Book].[Id]
+)
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [orders].[Customer](
+	[Id] [uniqueidentifier] NOT NULL,
+	[Email] [varchar](255) NOT NULL,
+	[Name] [varchar](200) NULL,
+	[WelcomeEmailWasSent] [bit] NOT NULL,
+ CONSTRAINT [PK_orders_Customer_Id] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE VIEW [orders].[ViewCustomer]
+AS
+SELECT
+	[Customer].[Id],
+	[Customer].[Email],
+	[Customer].[Name],
+    [Customer].[WelcomeEmailWasSent]
+FROM [orders].[Customer] AS [Customer]
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [orders].[BookPrice](
+	[BookId] [uniqueidentifier] NOT NULL,
+	[Value] [decimal](18, 2) NOT NULL,
+	[Currency] [varchar](3) NOT NULL,
+ CONSTRAINT [PK_orders_BookPrice_BookId, Currency] PRIMARY KEY CLUSTERED 
+(
+	[BookId] ASC,
+	[Currency] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE VIEW [orders].[ViewBookPrice]
+AS
+SELECT
+	[BookPrice].[BookId],
+	[BookPrice].[Value],
+	[BookPrice].[Currency]
+FROM [orders].[BookPrice] AS [BookPrice]
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [app].[InternalCommand](
+	[Id] [uniqueidentifier] NOT NULL,
+	[EnqueueDate] [datetime2](7) NOT NULL,
+	[Type] [varchar](255) NOT NULL,
+	[Data] [varchar](max) NOT NULL,
+	[ProcessedDate] [datetime2](7) NULL,
+ CONSTRAINT [PK_app_InternalCommand_Id] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [app].[OutboxMessage](
+	[Id] [uniqueidentifier] NOT NULL,
+	[OccurredOn] [datetime2](7) NOT NULL,
+	[Type] [varchar](255) NOT NULL,
+	[Data] [varchar](max) NOT NULL,
+	[ProcessedDate] [datetime2](7) NULL,
+ CONSTRAINT [PK_app_OutboxMessage_Id] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Author](
+	[Id] [uniqueidentifier] NOT NULL,
+	[FirstName] [nvarchar](150) NOT NULL,
+	[LastName] [nvarchar](150) NOT NULL,
+ CONSTRAINT [PK_dbo_Author_Id] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Publisher](
+	[Id] [uniqueidentifier] NOT NULL,
+	[Name] [nvarchar](150) NOT NULL,
+ CONSTRAINT [PK_dbo_Publisher_Id] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [payments].[Payment](
+	[Id] [uniqueidentifier] NOT NULL,
+	[CreateDate] [datetime2](7) NOT NULL,
+	[StatusId] [tinyint] NOT NULL,
+	[OrderId] [uniqueidentifier] NOT NULL,
+	[EmailNotificationIsSent] [bit] NOT NULL,
+ CONSTRAINT [PK_payments_Payment_Id] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[Book]  WITH CHECK ADD  CONSTRAINT [FK_dbo_Book_Author] FOREIGN KEY([AuthorId])
+REFERENCES [dbo].[Author] ([Id])
+GO
+
+ALTER TABLE [dbo].[Book] CHECK CONSTRAINT [FK_dbo_Book_Author]
+GO
+
+ALTER TABLE [dbo].[Book]  WITH CHECK ADD  CONSTRAINT [FK_dbo_Book_Publisher] FOREIGN KEY([PublisherId])
+REFERENCES [dbo].[Publisher] ([Id])
+GO
+
+ALTER TABLE [dbo].[Book] CHECK CONSTRAINT [FK_dbo_Book_Publisher]
+GO
+
+ALTER TABLE [orders].[BookPrice]  WITH CHECK ADD  CONSTRAINT [FK_orders_BookPrice_Book] FOREIGN KEY([BookId])
+REFERENCES [dbo].[Book] ([Id])
+GO
+
+ALTER TABLE [orders].[BookPrice] CHECK CONSTRAINT [FK_orders_BookPrice_Book]
+GO
+
+ALTER TABLE [orders].[Order]  WITH CHECK ADD  CONSTRAINT [FK_orders_Order_Customer] FOREIGN KEY([CustomerId])
+REFERENCES [orders].[Customer] ([Id])
+GO
+
+ALTER TABLE [orders].[Order] CHECK CONSTRAINT [FK_orders_Order_Customer]
+GO
+
+ALTER TABLE [orders].[OrderBook]  WITH CHECK ADD  CONSTRAINT [FK_orders__OrderBook_Order] FOREIGN KEY([OrderId])
+REFERENCES [orders].[Order] ([Id])
+GO
+
+ALTER TABLE [orders].[OrderBook] CHECK CONSTRAINT [FK_orders__OrderBook_Order]
+GO
+
+ALTER TABLE [orders].[OrderBook]  WITH CHECK ADD  CONSTRAINT [FK_orders_OrderBook_Book] FOREIGN KEY([BookId])
+REFERENCES [dbo].[Book] ([Id])
+GO
+
+ALTER TABLE [orders].[OrderBook] CHECK CONSTRAINT [FK_orders_OrderBook_Book]
+GO
+
+ALTER TABLE [payments].[Payment]  WITH CHECK ADD  CONSTRAINT [FK_orders_Payment_Order] FOREIGN KEY([OrderId])
+REFERENCES [orders].[Order] ([Id])
+GO
+
+ALTER TABLE [payments].[Payment] CHECK CONSTRAINT [FK_orders_Payment_Order]
+GO
+
+USE [master]
+GO
+
+ALTER DATABASE [CascadeFinTech] SET  READ_WRITE 
+GO
