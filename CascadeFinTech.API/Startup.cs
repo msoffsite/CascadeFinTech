@@ -36,7 +36,7 @@ namespace CascadeFinTech.API
             _logger = ConfigureLogger();
             _logger.Information("Logger configured");
 
-            this._configuration = new ConfigurationBuilder()
+            _configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json")
                 .AddJsonFile($"hosting.{env.EnvironmentName}.json")
@@ -64,13 +64,13 @@ namespace CascadeFinTech.API
 
             IExecutionContextAccessor executionContextAccessor = new ExecutionContextAccessor(serviceProvider.GetService<IHttpContextAccessor>());
 
-            var children = this._configuration.GetSection("Caching").GetChildren();
+            var children = _configuration.GetSection("Caching").GetChildren();
             var cachingConfiguration = children.ToDictionary(child => child.Key, child => TimeSpan.Parse(child.Value));
             var emailsSettings = _configuration.GetSection("EmailsSettings").Get<EmailsSettings>();
             var memoryCache = serviceProvider.GetService<IMemoryCache>();
             return ApplicationStartup.Initialize(
                 services, 
-                this._configuration[OrdersConnectionString],
+                _configuration[OrdersConnectionString],
                 new MemoryCacheStore(memoryCache, cachingConfiguration),
                 null,
                 emailsSettings,

@@ -8,7 +8,7 @@ namespace CascadeFinTech.Domain.Customers.Orders.Events
 
         public OrderRemovedEvent(OrderId orderId)
         {
-            this.OrderId = orderId;
+            OrderId = orderId;
         }
     }
 }

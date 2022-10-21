@@ -19,20 +19,20 @@ namespace CascadeFinTech.Infrastructure.Processing.InternalCommands
             IMediator mediator, 
             OrdersContext ordersContext)
         {
-            this._mediator = mediator;
-            this._ordersContext = ordersContext;
+            _mediator = mediator;
+            _ordersContext = ordersContext;
         }
 
         public async Task DispatchCommandAsync(Guid id)
         {
-            var internalCommand = await this._ordersContext.InternalCommands.SingleOrDefaultAsync(x => x.Id == id);
+            var internalCommand = await _ordersContext.InternalCommands.SingleOrDefaultAsync(x => x.Id == id);
 
             Type type = Assembly.GetAssembly(typeof(MarkCustomerAsWelcomedCommand)).GetType(internalCommand.Type);
             dynamic command = JsonConvert.DeserializeObject(internalCommand.Data, type);
 
             internalCommand.ProcessedDate = DateTime.UtcNow;
 
-            await this._mediator.Send(command);
+            await _mediator.Send(command);
         }
     }
 }

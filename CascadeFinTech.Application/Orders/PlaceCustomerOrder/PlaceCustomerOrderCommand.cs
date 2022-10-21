@@ -18,9 +18,9 @@ namespace CascadeFinTech.Application.Orders.PlaceCustomerOrder
             List<BookDto> books, 
             string currency)
         {
-            this.CustomerId = customerId;
-            this.Books = books;
-            this.Currency = currency;
+            CustomerId = customerId;
+            Books = books;
+            Currency = currency;
         }
     }
 }

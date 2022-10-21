@@ -21,14 +21,14 @@ namespace CascadeFinTech.Infrastructure.Processing
 
         public DomainEventsDispatcher(IMediator mediator, ILifetimeScope scope, OrdersContext ordersContext)
         {
-            this._mediator = mediator;
-            this._scope = scope;
-            this._ordersContext = ordersContext;
+            _mediator = mediator;
+            _scope = scope;
+            _ordersContext = ordersContext;
         }
 
         public async Task DispatchEventsAsync()
         {
-            var domainEntities = this._ordersContext.ChangeTracker
+            var domainEntities = _ordersContext.ChangeTracker
                 .Entries<Entity>()
                 .Where(x => x.Entity.DomainEvents != null && x.Entity.DomainEvents.Any()).ToList();
 
@@ -71,7 +71,7 @@ namespace CascadeFinTech.Infrastructure.Processing
                     domainEventNotification.DomainEvent.OccurredOn,
                     type,
                     data);
-                this._ordersContext.OutboxMessages.Add(outboxMessage);
+                _ordersContext.OutboxMessages.Add(outboxMessage);
             }
         }
     }

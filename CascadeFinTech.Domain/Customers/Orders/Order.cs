@@ -28,8 +28,8 @@ namespace CascadeFinTech.Domain.Customers.Orders
 
         private Order()
         {
-            this._orderBooks = new List<OrderBook>();
-            this._isRemoved = false;
+            _orderBooks = new List<OrderBook>();
+            _isRemoved = false;
         }
 
         private Order(
@@ -39,9 +39,9 @@ namespace CascadeFinTech.Domain.Customers.Orders
             List<ConversionRate> conversionRates
             )
         {
-            this._orderDate = SystemClock.Now;
-            this.Id = new OrderId(Guid.NewGuid());
-            this._orderBooks = new List<OrderBook>();
+            _orderDate = SystemClock.Now;
+            Id = new OrderId(Guid.NewGuid());
+            _orderBooks = new List<OrderBook>();
 
             foreach (var orderBookData in orderBooksData)
             {
@@ -56,8 +56,8 @@ namespace CascadeFinTech.Domain.Customers.Orders
                 _orderBooks.Add(orderBook);
             }
 
-            this.CalculateOrderValue();
-            this._status = OrderStatus.Placed;
+            CalculateOrderValue();
+            _status = OrderStatus.Placed;
         }
 
         internal static Order CreateNew(List<OrderBookData> orderBooksData,
@@ -82,14 +82,14 @@ namespace CascadeFinTech.Domain.Customers.Orders
                 var existingBookOrder = _orderBooks.SingleOrDefault(x => x.BookId == orderBookData.BookId);
                 if (existingBookOrder != null)
                 {
-                    var existingOrderBook = this._orderBooks.Single(x => x.BookId == existingBookOrder.BookId);
+                    var existingOrderBook = _orderBooks.Single(x => x.BookId == existingBookOrder.BookId);
                     
                     existingOrderBook.ChangeQuantity(book, orderBookData.Quantity, conversionRates);
                 }
                 else
                 {
                     var orderBook = OrderBook.CreateForBook(book, orderBookData.Quantity, currency, conversionRates);
-                    this._orderBooks.Add(orderBook);
+                    _orderBooks.Add(orderBook);
                 }
             }
 
@@ -99,23 +99,23 @@ namespace CascadeFinTech.Domain.Customers.Orders
                 var book = orderBooksData.SingleOrDefault(x => x.BookId == existingBook.BookId);
                 if (book == null)
                 {
-                    this._orderBooks.Remove(existingBook);
+                    _orderBooks.Remove(existingBook);
                 }
             }
 
-            this.CalculateOrderValue();
+            CalculateOrderValue();
 
-            this._orderChangeDate = DateTime.UtcNow;
+            _orderChangeDate = DateTime.UtcNow;
         }
 
         internal void Remove()
         {
-            this._isRemoved = true;
+            _isRemoved = true;
         }
 
         internal bool IsOrderedToday()
         {
-           return this._orderDate.Date == SystemClock.Now.Date;
+           return _orderDate.Date == SystemClock.Now.Date;
         }
 
         internal MoneyValue GetValue()

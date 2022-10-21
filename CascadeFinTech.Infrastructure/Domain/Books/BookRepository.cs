@@ -14,23 +14,25 @@ namespace CascadeFinTech.Infrastructure.Domain.Books
         private readonly OrdersContext _context;
         public BookRepository(OrdersContext context)
         {
-            this._context = context ?? throw new ArgumentNullException(nameof(context));
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         public async Task<List<Book>> GetByIdsAsync(List<BookId> ids)
         {
-            return await this._context
+            var output = await _context
                 .Books
                 .IncludePaths("_prices")
                 .Where(x => ids.Contains(x.Id)).ToListAsync();
+            return output;
         }
 
         public async Task<List<Book>> GetAllAsync()
         {
-            return await this._context
+            var output = await _context
                 .Books
                 .IncludePaths("_prices")
                 .ToListAsync();
+            return output;
         }
     }
 }

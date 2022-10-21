@@ -10,7 +10,7 @@ namespace CascadeFinTech.Infrastructure.Quartz
 
         public JobFactory(IContainer container)
         {
-            this._container = container;
+            _container = container;
         }
 
         public IJob NewJob(TriggerFiredBundle bundle, IScheduler scheduler)

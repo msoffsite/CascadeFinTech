@@ -9,7 +9,7 @@ namespace CascadeFinTech.Infrastructure.Domain.ForeignExchanges
 
         public ConversionRatesCache(List<ConversionRate> rates)
         {
-            this.Rates = rates;
+            Rates = rates;
         }
     }
 }

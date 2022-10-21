@@ -21,7 +21,7 @@ namespace CascadeFinTech.Infrastructure.Processing
 
         public async Task EnqueueAsync<T>(ICommand<T> command)
         {
-            var connection = this._sqlConnectionFactory.GetOpenConnection();
+            var connection = _sqlConnectionFactory.GetOpenConnection();
 
             const string sqlInsert = "INSERT INTO [app].[InternalCommand] ([Id], [EnqueueDate] , [Type], [Data]) VALUES " +
                                      "(@Id, @EnqueueDate, @Type, @Data)";

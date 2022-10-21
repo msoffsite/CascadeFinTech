@@ -14,12 +14,12 @@ namespace CascadeFinTech.Application.Orders.GetCustomerOrders
 
         internal GetCustomerOrdersQueryHandler(ISqlConnectionFactory sqlConnectionFactory)
         {
-            this._sqlConnectionFactory = sqlConnectionFactory;
+            _sqlConnectionFactory = sqlConnectionFactory;
         }
 
         public async Task<List<OrderDto>> Handle(GetCustomerOrdersQuery request, CancellationToken cancellationToken)
         {
-            var connection = this._sqlConnectionFactory.GetOpenConnection();
+            var connection = _sqlConnectionFactory.GetOpenConnection();
                 const string sql = "SELECT " +
                                    "[Order].[Id], " +
                                    "[Order].[IsRemoved], " +

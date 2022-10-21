@@ -19,7 +19,7 @@ namespace CascadeFinTech.Application.Orders.PlaceCustomerOrder
         {
             var newPayment = new Payment(notification.OrderId);
 
-            await this._paymentRepository.AddAsync(newPayment);
+            await _paymentRepository.AddAsync(newPayment);
         }
     }
 }

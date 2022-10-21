@@ -8,8 +8,8 @@ namespace CascadeFinTech.Domain.Payments
     {
         public PaymentCreatedEvent(PaymentId paymentId, OrderId orderId)
         {
-            this.PaymentId = paymentId;
-            this.OrderId = orderId;
+            PaymentId = paymentId;
+            OrderId = orderId;
         }
 
         public PaymentId PaymentId { get; }

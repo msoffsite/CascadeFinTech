@@ -17,8 +17,8 @@ namespace CascadeFinTech.Domain.Customers.Orders.Events
             CustomerId customerId, 
             MoneyValue value)
         {
-            this.OrderId = orderId;
-            this.CustomerId = customerId;
+            OrderId = orderId;
+            CustomerId = customerId;
             Value = value;
         }
     }

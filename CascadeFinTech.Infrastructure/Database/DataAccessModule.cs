@@ -21,7 +21,7 @@ namespace CascadeFinTech.Infrastructure.Database
 
         public DataAccessModule(string databaseConnectionString)
         {
-            this._databaseConnectionString = databaseConnectionString;
+            _databaseConnectionString = databaseConnectionString;
         }
 
         protected override void Load(ContainerBuilder builder)

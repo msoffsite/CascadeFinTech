@@ -22,10 +22,10 @@ namespace CascadeFinTech.Application.Orders.ChangeCustomerOrder
             List<BookDto> books, 
             string currency)
         {
-            this.CustomerId = customerId;
-            this.OrderId = orderId;
-            this.Currency = currency;
-            this.Books = books;
+            CustomerId = customerId;
+            OrderId = orderId;
+            Currency = currency;
+            Books = books;
         }
     }
 }

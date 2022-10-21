@@ -13,7 +13,7 @@ namespace CascadeFinTech.API.Configuration
         public CorrelationMiddleware(
             RequestDelegate next)
         {
-            this._next = next;
+            _next = next;
         }
 
         public async Task Invoke(HttpContext context)
@@ -25,7 +25,7 @@ namespace CascadeFinTech.API.Configuration
                 context.Request.Headers.Add(CorrelationHeaderKey, correlationId.ToString());
             }
 
-            await this._next.Invoke(context);
+            await _next.Invoke(context);
         }
     }
 }

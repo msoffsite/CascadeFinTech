@@ -15,7 +15,7 @@ namespace CascadeFinTech.API.Customers
 
         public CustomersController(IMediator mediator)
         {
-            this._mediator = mediator;
+            _mediator = mediator;
         }
 
         /// <summary>

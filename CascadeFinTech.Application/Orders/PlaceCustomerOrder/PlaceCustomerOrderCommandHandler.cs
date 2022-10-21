@@ -24,19 +24,19 @@ namespace CascadeFinTech.Application.Orders.PlaceCustomerOrder
             IForeignExchange foreignExchange, 
             ISqlConnectionFactory sqlConnectionFactory)
         {
-            this._customerRepository = customerRepository;
-            this._foreignExchange = foreignExchange;
+            _customerRepository = customerRepository;
+            _foreignExchange = foreignExchange;
             _sqlConnectionFactory = sqlConnectionFactory;
         }
 
         public async Task<Guid> Handle(PlaceCustomerOrderCommand command, CancellationToken cancellationToken)
         {
-            var customer = await this._customerRepository.GetByIdAsync(new CustomerId(command.CustomerId));
+            var customer = await _customerRepository.GetByIdAsync(new CustomerId(command.CustomerId));
 
             var allBookPrices =
                 await BookPriceProvider.GetAllBookPrices(_sqlConnectionFactory.GetOpenConnection());
 
-            var conversionRates = this._foreignExchange.GetConversionRates();
+            var conversionRates = _foreignExchange.GetConversionRates();
 
             var orderBooksData = command
                 .Books

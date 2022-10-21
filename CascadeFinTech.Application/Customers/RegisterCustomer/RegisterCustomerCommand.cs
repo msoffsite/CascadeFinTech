@@ -11,8 +11,8 @@ namespace CascadeFinTech.Application.Customers.RegisterCustomer
 
         public RegisterCustomerCommand(string email, string name)
         {
-            this.Email = email;
-            this.Name = name;
+            Email = email;
+            Name = name;
         }      
     }
 }

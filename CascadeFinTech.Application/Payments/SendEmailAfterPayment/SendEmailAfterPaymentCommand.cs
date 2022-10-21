@@ -13,7 +13,7 @@ namespace CascadeFinTech.Application.Payments.SendEmailAfterPayment
         [JsonConstructor]
         public SendEmailAfterPaymentCommand(Guid id, PaymentId paymentId) : base(id)
         {
-            this.PaymentId = paymentId;
+            PaymentId = paymentId;
         }
     }
 }

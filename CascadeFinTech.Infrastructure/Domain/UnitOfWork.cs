@@ -15,14 +15,14 @@ namespace CascadeFinTech.Infrastructure.Domain
             OrdersContext ordersContext, 
             IDomainEventsDispatcher domainEventsDispatcher)
         {
-            this._ordersContext = ordersContext;
-            this._domainEventsDispatcher = domainEventsDispatcher;
+            _ordersContext = ordersContext;
+            _domainEventsDispatcher = domainEventsDispatcher;
         }
 
         public async Task<int> CommitAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            await this._domainEventsDispatcher.DispatchEventsAsync();
-            return await this._ordersContext.SaveChangesAsync(cancellationToken);
+            await _domainEventsDispatcher.DispatchEventsAsync();
+            return await _ordersContext.SaveChangesAsync(cancellationToken);
         }
     }
 }

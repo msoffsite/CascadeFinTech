@@ -13,9 +13,9 @@
             string to,
             string content)
         {
-            this.From = from;
-            this.To = to;
-            this.Content = content;
+            From = from;
+            To = to;
+            Content = content;
         }
     }
 }

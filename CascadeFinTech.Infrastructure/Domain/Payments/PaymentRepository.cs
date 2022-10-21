@@ -12,18 +12,18 @@ namespace CascadeFinTech.Infrastructure.Domain.Payments
 
         public PaymentRepository(OrdersContext context)
         {
-            this._context = context ?? throw new ArgumentNullException(nameof(context));
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         public async Task<Payment> GetByIdAsync(PaymentId id)
         {
-            return await this._context.Payments
+            return await _context.Payments
                 .SingleAsync(x => x.Id == id);
         }
 
         public async Task AddAsync(Payment payment)
         {
-            await this._context.Payments.AddAsync(payment);
+            await _context.Payments.AddAsync(payment);
         }
     }
 }

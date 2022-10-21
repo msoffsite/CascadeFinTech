@@ -15,7 +15,7 @@ namespace CascadeFinTech.Application.Customers.DomainServices
 
         public bool IsUnique(string customerEmail)
         {
-            var connection = this._sqlConnectionFactory.GetOpenConnection();
+            var connection = _sqlConnectionFactory.GetOpenConnection();
 
             const string sql = "SELECT TOP 1 1" +
                                "FROM [orders].[Customer] AS [Customer] " +

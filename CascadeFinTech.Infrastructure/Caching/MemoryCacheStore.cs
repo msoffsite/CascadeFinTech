@@ -14,7 +14,7 @@ namespace CascadeFinTech.Infrastructure.Caching
             Dictionary<string, TimeSpan> expirationConfiguration)
         {
             _memoryCache = memoryCache;
-            this._expirationConfiguration = expirationConfiguration;
+            _expirationConfiguration = expirationConfiguration;
         }
 
         public void Add<TItem>(TItem item, ICacheKey<TItem> key, TimeSpan? expirationTime = null)
@@ -30,7 +30,7 @@ namespace CascadeFinTech.Infrastructure.Caching
                 timespan = _expirationConfiguration[cachedObjectName];
             }
 
-            this._memoryCache.Set(key.CacheKey, item, timespan);
+            _memoryCache.Set(key.CacheKey, item, timespan);
         }
 
         public void Add<TItem>(TItem item, ICacheKey<TItem> key, DateTime? absoluteExpiration = null)
@@ -45,12 +45,12 @@ namespace CascadeFinTech.Infrastructure.Caching
                 offset = DateTimeOffset.MaxValue;
             }
 
-            this._memoryCache.Set(key.CacheKey, item, offset);
+            _memoryCache.Set(key.CacheKey, item, offset);
         }
 
         public TItem Get<TItem>(ICacheKey<TItem> key) where TItem : class
         {
-            if (this._memoryCache.TryGetValue(key.CacheKey, out TItem value))
+            if (_memoryCache.TryGetValue(key.CacheKey, out TItem value))
             {
                 return value;
             }
@@ -60,7 +60,7 @@ namespace CascadeFinTech.Infrastructure.Caching
 
         public void Remove<TItem>(ICacheKey<TItem> key)
         {
-            this._memoryCache.Remove(key.CacheKey);
+            _memoryCache.Remove(key.CacheKey);
         }
     }
 }

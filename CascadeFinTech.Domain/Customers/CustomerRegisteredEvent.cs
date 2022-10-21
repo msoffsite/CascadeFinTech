@@ -8,7 +8,7 @@ namespace CascadeFinTech.Domain.Customers
 
         public CustomerRegisteredEvent(CustomerId customerId)
         {
-            this.CustomerId = customerId;
+            CustomerId = customerId;
         }
     }
 }

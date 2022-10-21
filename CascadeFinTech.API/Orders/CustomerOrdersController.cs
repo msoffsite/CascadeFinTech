@@ -20,7 +20,7 @@ namespace CascadeFinTech.API.Orders
 
         public CustomerOrdersController(IMediator mediator)
         {
-            this._mediator = mediator;
+            _mediator = mediator;
         }
 
         /// <summary>

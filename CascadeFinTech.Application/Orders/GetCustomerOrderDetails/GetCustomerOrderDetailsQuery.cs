@@ -10,7 +10,7 @@ namespace CascadeFinTech.Application.Orders.GetCustomerOrderDetails
 
         public GetCustomerOrderDetailsQuery(Guid orderId)
         {
-            this.OrderId = orderId;
+            OrderId = orderId;
         }
     }
 }

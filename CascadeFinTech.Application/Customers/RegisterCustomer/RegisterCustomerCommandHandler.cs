@@ -19,18 +19,18 @@ namespace CascadeFinTech.Application.Customers.RegisterCustomer
             ICustomerUniquenessChecker customerUniquenessChecker, 
             IUnitOfWork unitOfWork)
         {
-            this._customerRepository = customerRepository;
+            _customerRepository = customerRepository;
             _customerUniquenessChecker = customerUniquenessChecker;
             _unitOfWork = unitOfWork;
         }
 
         public async Task<CustomerDto> Handle(RegisterCustomerCommand request, CancellationToken cancellationToken)
         {
-            var customer = Customer.CreateRegistered(request.Email, request.Name, this._customerUniquenessChecker);
+            var customer = Customer.CreateRegistered(request.Email, request.Name, _customerUniquenessChecker);
 
-            await this._customerRepository.AddAsync(customer);
+            await _customerRepository.AddAsync(customer);
 
-            await this._unitOfWork.CommitAsync(cancellationToken);
+            await _unitOfWork.CommitAsync(cancellationToken);
 
             return new CustomerDto { Id = customer.Id.Value };
         }

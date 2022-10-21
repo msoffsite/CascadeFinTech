@@ -18,8 +18,8 @@ namespace CascadeFinTech.Application.Orders
 
         public BookDto(Guid id, int quantity)
         {
-            this.Id = id;
-            this.Quantity = quantity;
+            Id = id;
+            Quantity = quantity;
         }
     }
 }

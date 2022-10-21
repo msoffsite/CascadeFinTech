@@ -24,18 +24,18 @@ namespace CascadeFinTech.Domain.Customers
 
         private Customer()
         {
-            this._orders = new List<Order>();
+            _orders = new List<Order>();
         }
          
         private Customer(string email, string name)
         {
-            this.Id = new CustomerId(Guid.NewGuid());
+            Id = new CustomerId(Guid.NewGuid());
             _email = email;
             _name = name;
             _welcomeEmailWasSent = false;
             _orders = new List<Order>();
 
-            this.AddDomainEvent(new CustomerRegisteredEvent(this.Id));
+            AddDomainEvent(new CustomerRegisteredEvent(Id));
         }
 
         public static Customer CreateRegistered(
@@ -59,9 +59,9 @@ namespace CascadeFinTech.Domain.Customers
 
             var order = Order.CreateNew(orderBooksData, allBookPrices, currency, conversionRates);
 
-            this._orders.Add(order);
+            _orders.Add(order);
 
-            this.AddDomainEvent(new OrderPlacedEvent(order.Id, this.Id, order.GetValue()));
+            AddDomainEvent(new OrderPlacedEvent(order.Id, Id, order.GetValue()));
 
             return order.Id;
         }
@@ -75,23 +75,23 @@ namespace CascadeFinTech.Domain.Customers
         {
             CheckRule(new OrderMustHaveAtLeastOneBookRule(newOrderBooksData));
 
-            var order = this._orders.Single(x => x.Id == orderId);
+            var order = _orders.Single(x => x.Id == orderId);
             order.Change(existingBooks, newOrderBooksData, conversionRates, currency);
 
-            this.AddDomainEvent(new OrderChangedEvent(orderId));
+            AddDomainEvent(new OrderChangedEvent(orderId));
         }
 
         public void RemoveOrder(OrderId orderId)
         {
-            var order = this._orders.Single(x => x.Id == orderId);
+            var order = _orders.Single(x => x.Id == orderId);
             order.Remove();
 
-            this.AddDomainEvent(new OrderRemovedEvent(orderId));
+            AddDomainEvent(new OrderRemovedEvent(orderId));
         }
 
         public void MarkAsWelcomedByEmail()
         {
-            this._welcomeEmailWasSent = true;
+            _welcomeEmailWasSent = true;
         }
     }
 }

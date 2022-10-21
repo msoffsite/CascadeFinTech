@@ -28,7 +28,7 @@ namespace CascadeFinTech.Infrastructure.Processing.Outbox
 
         public async Task<Unit> Handle(ProcessOutboxCommand command, CancellationToken cancellationToken)
         {
-            var connection = this._sqlConnectionFactory.GetOpenConnection();
+            var connection = _sqlConnectionFactory.GetOpenConnection();
             const string sql = "SELECT " +
                                "[OutboxMessage].[Id], " +
                                "[OutboxMessage].[Type], " +
@@ -52,7 +52,7 @@ namespace CascadeFinTech.Infrastructure.Processing.Outbox
 
                     using (LogContext.Push(new OutboxMessageContextEnricher(request)))
                     {
-                        await this._mediator.Publish(request, cancellationToken);
+                        await _mediator.Publish(request, cancellationToken);
 
                         await connection.ExecuteAsync(sqlUpdateProcessedDate, new
                         {

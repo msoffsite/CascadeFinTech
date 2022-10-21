@@ -20,7 +20,7 @@ namespace CascadeFinTech.Application.Customers.IntegrationHandlers
         {
             // Send welcome e-mail message...
 
-            await this._commandsScheduler.EnqueueAsync(new MarkCustomerAsWelcomedCommand(
+            await _commandsScheduler.EnqueueAsync(new MarkCustomerAsWelcomedCommand(
                 Guid.NewGuid(),
                 notification.CustomerId));
         }

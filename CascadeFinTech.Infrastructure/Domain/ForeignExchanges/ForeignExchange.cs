@@ -16,7 +16,7 @@ namespace CascadeFinTech.Infrastructure.Domain.ForeignExchanges
 
         public List<ConversionRate> GetConversionRates()
         {
-            var ratesCache = this._cacheStore.Get(new ConversionRatesCacheKey());
+            var ratesCache = _cacheStore.Get(new ConversionRatesCacheKey());
 
             if (ratesCache != null)
             {
@@ -25,7 +25,7 @@ namespace CascadeFinTech.Infrastructure.Domain.ForeignExchanges
 
             List<ConversionRate> rates = GetConversionRatesFromExternalApi();
 
-            this._cacheStore.Add(new ConversionRatesCache(rates), new ConversionRatesCacheKey(), DateTime.Now.Date.AddDays(1));
+            _cacheStore.Add(new ConversionRatesCache(rates), new ConversionRatesCacheKey(), DateTime.Now.Date.AddDays(1));
 
             return rates;
         }

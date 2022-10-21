@@ -14,8 +14,8 @@ namespace CascadeFinTech.Application.Orders.RemoveCustomerOrder
             Guid customerId,
             Guid orderId)
         {
-            this.CustomerId = customerId;
-            this.OrderId = orderId;
+            CustomerId = customerId;
+            OrderId = orderId;
         }
     }
 }

@@ -29,10 +29,10 @@ namespace CascadeFinTech.Domain.Customers.Orders
             string currency,
             List<ConversionRate> conversionRates)
         {
-            this.BookId = bookPrice.BookId;
-            this.Quantity = quantity;
+            BookId = bookPrice.BookId;
+            Quantity = quantity;
 
-            this.CalculateValue(bookPrice, currency, conversionRates);
+            CalculateValue(bookPrice, currency, conversionRates);
         }
 
         internal static OrderBook CreateForBook(
@@ -44,22 +44,22 @@ namespace CascadeFinTech.Domain.Customers.Orders
 
         internal void ChangeQuantity(BookPriceData bookPrice, int quantity, List<ConversionRate> conversionRates)
         {
-            this.Quantity = quantity;
+            Quantity = quantity;
 
-            this.CalculateValue(bookPrice, this.Value.Currency, conversionRates);
+            CalculateValue(bookPrice, Value.Currency, conversionRates);
         }
 
         private void CalculateValue(BookPriceData bookPrice, string currency, List<ConversionRate> conversionRates)
         {
-            this.Value = this.Quantity * bookPrice.Price;
+            Value = Quantity * bookPrice.Price;
             if (currency == "EUR")
             {
-                this.ValueInEUR = this.Quantity * bookPrice.Price;
+                ValueInEUR = Quantity * bookPrice.Price;
             }
             else
             {
                 var conversionRate = conversionRates.Single(x => x.SourceCurrency == currency && x.TargetCurrency == "EUR");
-                this.ValueInEUR = conversionRate.Convert(this.Value);
+                ValueInEUR = conversionRate.Convert(Value);
             }
         }
     }

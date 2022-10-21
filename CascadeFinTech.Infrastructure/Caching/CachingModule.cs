@@ -17,7 +17,7 @@ namespace CascadeFinTech.Infrastructure.Caching
         {
             builder.RegisterType<MemoryCacheStore>()
                 .As<ICacheStore>()
-                .WithParameter("expirationConfiguration", this._expirationConfiguration)
+                .WithParameter("expirationConfiguration", _expirationConfiguration)
                 .SingleInstance();
         }
     }

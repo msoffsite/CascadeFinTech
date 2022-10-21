@@ -14,8 +14,8 @@ namespace CascadeFinTech.Application.Configuration.DomainEvents
 
         public DomainNotificationBase(T domainEvent)
         {
-            this.Id = Guid.NewGuid();
-            this.DomainEvent = domainEvent;
+            Id = Guid.NewGuid();
+            DomainEvent = domainEvent;
         }
     }
 }

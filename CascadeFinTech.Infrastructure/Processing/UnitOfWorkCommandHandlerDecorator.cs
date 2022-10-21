@@ -30,7 +30,7 @@ namespace CascadeFinTech.Infrastructure.Processing
 
         public async Task<Unit> Handle(T command, CancellationToken cancellationToken)
         {
-            await this._decorated.Handle(command, cancellationToken);
+            await _decorated.Handle(command, cancellationToken);
 
             if (command is InternalCommandBase)
             {
@@ -44,7 +44,7 @@ namespace CascadeFinTech.Infrastructure.Processing
                 }
             }
 
-            await this._unitOfWork.CommitAsync(cancellationToken);
+            await _unitOfWork.CommitAsync(cancellationToken);
 
             return Unit.Value;
         }

@@ -44,19 +44,19 @@ namespace CascadeFinTech.Infrastructure.Logging
             {
                 try
                 {
-                    this._logger.Information(
+                    _logger.Information(
                         "Executing command {Command}",
                         command.GetType().Name);
 
                     var result = await _decorated.Handle(command, cancellationToken);
 
-                    this._logger.Information("Command {Command} processed successful", command.GetType().Name);
+                    _logger.Information("Command {Command} processed successful", command.GetType().Name);
 
                     return result;
                 }
                 catch (Exception exception)
                 {
-                    this._logger.Error(exception, "Command {Command} processing failed", command.GetType().Name);
+                    _logger.Error(exception, "Command {Command} processing failed", command.GetType().Name);
                     throw;
                 }
             }
